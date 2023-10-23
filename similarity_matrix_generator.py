@@ -50,7 +50,7 @@ dir = './data'
 large_locale = 'JP'
 small_locale = 'ES'
 
-all_item = pd.read_csv(dir + './products_train.csv')
+all_item = pd.read_csv(dir + '/products_train.csv')
 large_item = all_item[all_item['locale'] == large_locale]
 small_item = all_item[all_item['locale'] == small_locale]
 del all_item
@@ -109,3 +109,21 @@ for key, value in large_to_small_duplicate_idx.items():
     large_to_small_mem[key][value] = float(1.0)
 #save
 large_to_small_mem.flush()
+
+
+#5. get the "most similar Region B item" for each Region A item
+# Iterate through 'large_to_small_mem' and create a dataframe
+data = []
+for i, row in enumerate(tqdm(large_to_small_mem)):
+    item_id = large_item_filtered.loc[i]['id']
+    best_small_index = row.argmax()
+    similarity_value = np.max(row)
+    data.append([i, item_id, best_small_index, similarity_value])
+
+# Create a dataframe with the extracted values
+largeid_smallid_score_df = pd.DataFrame(data, columns=['index', 'id', 'best small', 'similarity'])
+
+# Set the 'index' column as the index of the dataframe
+largeid_smallid_score_df.set_index('index', inplace=True)
+
+pd.to_csv(dir + '/most_similar_{large_locale}_to_{small_locale}.csv')
