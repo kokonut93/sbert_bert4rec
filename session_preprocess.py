@@ -40,7 +40,7 @@ large_session['valid'] = valid_column
 #3. Selecting only users with purchase over "threshold"
 '''Need to decide on the threshold. The threshold entails "the minimum number of items that the user bought"'''
 threshold=10
-# Drop rows with NaN values after column 10
+# Drop rows with NaN values after column "threshold" (in this case, 10)
 large_session = large_session.dropna(axis=0, thresh=threshold)
 # Reset the index
 large_session = large_session.reset_index(drop=True)
