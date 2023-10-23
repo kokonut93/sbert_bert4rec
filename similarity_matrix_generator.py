@@ -124,4 +124,4 @@ largeid_smallid_score_df = pd.DataFrame(data, columns=['index', 'id', 'best smal
 # Set the 'index' column as the index of the dataframe
 largeid_smallid_score_df.set_index('index', inplace=True)
 
-pd.to_csv(dir + f'/most_similar_{large_locale}_to_{small_locale}.csv')
+largeid_smallid_score_df.to_csv(dir + f'/most_similar_{large_locale}_to_{small_locale}.csv')
