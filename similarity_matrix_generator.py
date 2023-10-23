@@ -5,10 +5,7 @@ import re
 import matplotlib.pyplot as plt
 
 from tqdm import tqdm
-
 import pickle
-
-from torchinfo import summary
 
 from sentence_transformers import SentenceTransformer, util
 import torch
@@ -49,13 +46,14 @@ Region B
 dir = './data'
 large_locale = 'JP'
 small_locale = 'ES'
+threshold = 10
 
 all_item = pd.read_csv(dir + '/products_train.csv')
 large_item = all_item[all_item['locale'] == large_locale]
 small_item = all_item[all_item['locale'] == small_locale]
 del all_item
 
-with open(dir + f'{large_locale}_unique_values.pkl', 'rb') as f:
+with open(dir + f'{large_locale}_{threshold}over_unique_item_id.pkl', 'rb') as f:
     unique_values = pickle.load(f)
 
 
@@ -87,8 +85,8 @@ corpus_embedding = model.encode(corpus, convert_to_tensor=True)
 top_k = min(200, len(corpus))
 
 # Since the size of matrix is too large to load on RAM, save the matrix on local using memmap
-large_to_small_mem = np.memmap(filename = f'./large/{large_locale}_to_{small_locale}_mem', dtype='float32', mode='w+', shape=(len(queries), len(corpus)))
-#
+large_to_small_mem = np.memmap(filename = '/{large_locale}_to_{small_locale}_mem', dtype='float32', mode='w+', shape=(len(queries), len(corpus)))
+#calculate cosine similarity
 for idx, query in enumerate(tqdm(queries)):
     query_embedding = model.encode(query, convert_to_tensor=True)
     cos_scores = util.cos_sim(query_embedding, corpus_embedding)[0]
@@ -126,4 +124,4 @@ largeid_smallid_score_df = pd.DataFrame(data, columns=['index', 'id', 'best smal
 # Set the 'index' column as the index of the dataframe
 largeid_smallid_score_df.set_index('index', inplace=True)
 
-pd.to_csv(dir + '/most_similar_{large_locale}_to_{small_locale}.csv')
+pd.to_csv(dir + f'/most_similar_{large_locale}_to_{small_locale}.csv')

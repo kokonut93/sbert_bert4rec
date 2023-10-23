@@ -5,10 +5,7 @@ import re
 import matplotlib.pyplot as plt
 
 from tqdm import tqdm
-
 import pickle
-
-from torchinfo import summary
 
 #1. Load data
 dir = './data'
@@ -47,3 +44,13 @@ threshold=10
 large_session = large_session.dropna(axis=0, thresh=threshold)
 # Reset the index
 large_session = large_session.reset_index(drop=True)
+
+# Get unique values from the dataset
+unique_values = large_session.values.flatten().tolist()
+unique_values = list(set(unique_values))
+
+
+#4. Save all files
+with open(dir + f'/{large_locale}_{threshold}over_unique_item_id.pkl', 'wb') as f:
+    pickle.dump(unique_values.index, f)  
+large_session.to_csv(dir + f'/{large_locale}_session_{threshold}over.csv', index=False)
