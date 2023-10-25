@@ -43,7 +43,7 @@ Region B
 '''
 
 #1. Load data
-dir = './data'
+dir = '../data'
 large_locale = 'JP'
 small_locale = 'ES'
 threshold = 10

@@ -4,7 +4,7 @@ from tqdm import tqdm
 import pickle
 
 
-dir = './data'
+dir = '../data'
 large_locale = 'JP'
 small_locale = 'ES'
 

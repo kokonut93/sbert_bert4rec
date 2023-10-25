@@ -8,7 +8,7 @@ from tqdm import tqdm
 import pickle
 
 #1. Load data
-dir = './data'
+dir = '../data'
 large_locale = 'UK'
 small_locale = 'ES'
 
